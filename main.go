@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/MathWebSearch/mws-updater/src"
+	"github.com/MathWebSearch/mws-indexer/src"
 )
 
 func main() {
