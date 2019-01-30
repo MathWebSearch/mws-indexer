@@ -1,6 +1,6 @@
 # mws-updater
 
-[![Build Status](https://travis-ci.org/MathWebSearch/mws-updater.svg?branch=master)](https://travis-ci.org/MathWebSearch/mws-updater)
+[![Build Status](https://travis-ci.org/MathWebSearch/mws-indexer.svg?branch=master)](https://travis-ci.org/MathWebSearch/mws-indexer)
 
 A script that can safely update the index used by MathWebSearch. 
 Written in golang, and packaged via docker. 
