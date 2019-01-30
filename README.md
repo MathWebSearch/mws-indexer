@@ -39,12 +39,12 @@ The script performs the following update mechanism:
 ## Dockerfile
 
 This script is intended to be used from inside of docker. 
-It is available as the automated build [mathwebsearch/mws-updater](https://hub.docker.com/r/mathwebsearch/mws-updater) on DockerHub. 
+It is available as the automated build [mathwebsearch/mws-indexer](https://hub.docker.com/r/mathwebsearch/mws-indexer) on DockerHub. 
 
 It can be run as follows:
 
 ```bash
-    docker run -t -i --rm -e MWS_DOCKER_LABEL="mws-container-label" -v data-volume:/data/ -v index-volume:/index/ -v /var/run/docker.sock:/var/run/docker.sock mathwebsearch/mws-updater
+    docker run -t -i --rm -e MWS_DOCKER_LABEL="mws-container-label" -v data-volume:/data/ -v index-volume:/index/ -v /var/run/docker.sock:/var/run/docker.sock mathwebsearch/mws-indexer
 ```
 
 ## LICENSE
