@@ -13,7 +13,7 @@ FROM mathwebsearch/mathwebsearch
 COPY --from=builder /go/src/github.com/MathWebSearch/mws-indexer/out/mwsupdate /mws/bin/mwsupdate
 
 # Create volumes under harvest and index
-VOLUME /harvest/
+VOLUME /data/
 VOLUME /index/
 
 # And add a label for the docker container
