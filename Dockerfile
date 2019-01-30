@@ -19,4 +19,4 @@ VOLUME /index/
 # And add a label for the docker container
 ENV MWS_DOCKER_LABEL ""
 
-CMD [ "/bin/bash", "-c", "/mws/bin/mwsupdate", "--docker-label", "$MWS_DOCKER_LABEL" ]
+CMD [ "/bin/bash", "-c", "/mws/bin/mwsupdate", "--git", "--docker-label", "$MWS_DOCKER_LABEL" ]

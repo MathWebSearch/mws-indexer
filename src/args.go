@@ -21,6 +21,8 @@ func ValidateArguments() {
 
 	// docker-label: name of docker container to restart
 	fmt.Printf("docker-label: %q\n", dockerLabel)
+
+	fmt.Println("------------------------------------------")
 }
 
 // ensureDirectoryOrPanic ensures that caniddate is a directory or otherwise panics with message

@@ -10,6 +10,11 @@ func main() {
 	// validate the arguments
 	src.ValidateArguments()
 
+	// update sources (if needed)
+	if !src.UpdateSources() {
+		os.Exit(1)
+	}
+
 	// generate and update the new index
 	if !src.GenerateIndex() {
 		os.Exit(1)

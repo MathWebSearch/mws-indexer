@@ -32,6 +32,7 @@ Usage of mwsupdate:
 
 The script performs the following update mechanism:
 
+0. Run `git pull` inside the harvest directory (iff it is a git repository)
 1. Generate a new index from the harvest directory, using the `mws-index` executable. 
 2. If successfull, replace the index directory with the newly generated one
 3. If successfull and if a `docker-label` is provided, restart all docker containers with the given label. 
