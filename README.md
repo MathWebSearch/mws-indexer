@@ -1,4 +1,4 @@
-# mws-updater
+# mws-indexer
 
 [![Build Status](https://travis-ci.org/MathWebSearch/mws-indexer.svg?branch=master)](https://travis-ci.org/MathWebSearch/mws-indexer)
 
