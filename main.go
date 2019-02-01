@@ -7,19 +7,19 @@ import (
 )
 
 func main() {
-	// validate the arguments
-	src.ValidateArguments()
+	// parse and validate arguments
+	args := src.ParseArgs(os.Args)
+	if !args.Validate() {
+		os.Exit(1)
+	}
 
 	// update sources (if needed)
-	if !src.UpdateSources() {
+	if !src.UpdateSources(args) {
 		os.Exit(1)
 	}
 
 	// generate and update the new index
-	if !src.GenerateIndex() {
+	if !src.GenerateIndex(args) {
 		os.Exit(1)
 	}
-
-	// run post-update hooks
-	src.PostUpdateHooks()
 }

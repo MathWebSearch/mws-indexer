@@ -12,7 +12,7 @@ import (
 )
 
 // GenerateIndex generates a new index for use with MathWebSearch
-func GenerateIndex() bool {
+func GenerateIndex(args *Args) bool {
 	// create a new temporary directory
 	tmpDir, err := ioutil.TempDir("", "mws-index")
 	if err != nil {
@@ -21,15 +21,15 @@ func GenerateIndex() bool {
 	fmt.Printf("Created temporary directory %q\n", tmpDir)
 	defer os.RemoveAll(tmpDir)
 
-	result := callWithInheritIO(mwsIndexExec, "--recursive", "--include-harvest-path", harvestDir, "--output-directory", tmpDir)
+	result := callWithInheritIO(args.mwsIndexExec, "--recursive", "--include-harvest-path", args.harvestDir, "--output-directory", tmpDir)
 	if !result {
 		fmt.Printf("mws-index failed, exiting.")
 		return false
 	}
 
-	fmt.Printf("Update %q with new index from %q.\n", indexDir, tmpDir)
+	fmt.Printf("Update %q with new index from %q.\n", args.indexDir, tmpDir)
 
-	content := updateContents(tmpDir, indexDir)
+	content := updateContents(tmpDir, args.indexDir)
 	if content != nil {
 		fmt.Println("Update Content failed (is there enough space?)")
 		return false

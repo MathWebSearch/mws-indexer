@@ -20,8 +20,6 @@ A static `mwsupdate` executable (both for the current architecture and cross-com
 
 ```
 Usage of mwsupdate:
-  -docker-label string
-        label of docker container to restart
   -harvest-dir string
         Path to harvest directory (default "/data/")
   -index-dir string
@@ -35,7 +33,6 @@ The script performs the following update mechanism:
 0. Run `git pull` inside the harvest directory (iff it is a git repository)
 1. Generate a new index from the harvest directory, using the `mws-index` executable. 
 2. If successfull, replace the index directory with the newly generated one
-3. If successfull and if a `docker-label` is provided, restart all docker containers with the given label. 
 
 ## Dockerfile
 
@@ -45,7 +42,7 @@ It is available as the automated build [mathwebsearch/mws-indexer](https://hub.d
 It can be run as follows:
 
 ```bash
-    docker run -t -i --rm -e MWS_DOCKER_LABEL="mws-container-label" -v data-volume:/data/ -v index-volume:/index/ -v /var/run/docker.sock:/var/run/docker.sock mathwebsearch/mws-indexer
+    docker run -t -i --rm -v data-volume:/data/ -v index-volume:/index/ -v /var/run/docker.sock:/var/run/docker.sock mathwebsearch/mws-indexer
 ```
 
 ## LICENSE

@@ -8,14 +8,14 @@ import (
 )
 
 // UpdateSources updates the sources used by the index updater
-func UpdateSources() (success bool) {
+func UpdateSources(args *Args) (success bool) {
 	// try and open the repository
-	r, err := git.PlainOpen(harvestDir)
+	r, err := git.PlainOpen(args.harvestDir)
 	if err != nil {
 		return true
 	}
 
-	fmt.Printf("Trying to update git repository in %q\n", harvestDir)
+	fmt.Printf("Trying to update git repository in %q\n", args.harvestDir)
 
 	// get the working tree
 	w, err := r.Worktree()
