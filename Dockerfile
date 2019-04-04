@@ -16,7 +16,4 @@ COPY --from=builder /go/src/github.com/MathWebSearch/mws-indexer/out/mwsupdate /
 VOLUME /data/
 VOLUME /index/
 
-# And add a label for the docker container
-ENV MWS_DOCKER_LABEL ""
-
-CMD [ "/bin/bash", "-c", "/mws/bin/mwsupdate", "--git", "--docker-label", "$MWS_DOCKER_LABEL" ]
+ENTRYPOINT [ "/mws/bin/mwsupdate" ]

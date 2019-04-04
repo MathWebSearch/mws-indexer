@@ -8,9 +8,13 @@ import (
 
 // Args represents command-line arguments
 type Args struct {
-	harvestDir   string
-	indexDir     string
-	mwsIndexExec string
+	harvestDir string
+	indexDir   string
+
+	mwsIndexExec      string
+	harvests2jsonExec string
+
+	temaSearchMode bool
 }
 
 // ParseArgs parses arguments from a list of strings
@@ -26,9 +30,11 @@ func ParseArgs(args []string) *Args {
 	}
 
 	// all our arguments
+	flagSet.BoolVar(&flags.temaSearchMode, "tema", false, "Generate indexes for tema-search")
 	flagSet.StringVar(&flags.harvestDir, "harvest-dir", "/data/", "Path to harvest directory")
 	flagSet.StringVar(&flags.indexDir, "index-dir", "/index/", "Path to index directory")
 	flagSet.StringVar(&flags.mwsIndexExec, "mws-index", "/mws/bin/mws-index", "mws-index executable")
+	flagSet.StringVar(&flags.harvests2jsonExec, "harvests2json", "/mws/bin/harvests2json", "harvests2json executable")
 
 	// parse and exit
 	flagSet.Parse(args[1:])
@@ -37,6 +43,10 @@ func ParseArgs(args []string) *Args {
 
 // Validate validates the command-line arguments or panics
 func (args *Args) Validate() bool {
+
+	// tema: Tema-search mode
+	fmt.Printf("tema: %t\n", args.temaSearchMode)
+
 	// harvest directory: ensure that this is a directory
 	if !ensureDirectory(args.harvestDir) {
 		fmt.Printf("harvest-dir: %q is not a directory\n", args.harvestDir)
@@ -51,8 +61,11 @@ func (args *Args) Validate() bool {
 	}
 	fmt.Printf("index-dir: %q\n", args.indexDir)
 
-	// index: executable to call
+	// mws-index: executable to call
 	fmt.Printf("mws-index: %q\n", args.mwsIndexExec)
+
+	// harvests-2-json: json executable
+	fmt.Printf("harvests2json: %q\n", args.harvests2jsonExec)
 
 	fmt.Println("------------------------------------------")
 	return true

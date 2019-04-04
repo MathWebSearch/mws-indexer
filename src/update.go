@@ -21,10 +21,24 @@ func GenerateIndex(args *Args) bool {
 	fmt.Printf("Created temporary directory %q\n", tmpDir)
 	defer os.RemoveAll(tmpDir)
 
-	result := callWithInheritIO(args.mwsIndexExec, "--recursive", "--include-harvest-path", args.harvestDir, "--output-directory", tmpDir)
-	if !result {
+	mwsResult := generateMWSIndex(args, tmpDir)
+	if !mwsResult {
 		fmt.Printf("mws-index failed, exiting.")
 		return false
+	}
+
+	if args.temaSearchMode {
+		temaResult := generateTemaIndex(args, tmpDir)
+		if !temaResult {
+			fmt.Printf("harvests2json failed, exiting.")
+			return false
+		}
+
+		temaMoveResult := moveTemaIndex(args, tmpDir)
+		if !temaMoveResult {
+			fmt.Printf("failed to move generated tema-search index, exiting.")
+			return false
+		}
 	}
 
 	fmt.Printf("Update %q with new index from %q.\n", args.indexDir, tmpDir)
@@ -36,6 +50,51 @@ func GenerateIndex(args *Args) bool {
 	}
 
 	return true
+}
+
+func generateMWSIndex(args *Args, tmpDir string) bool {
+	fmt.Println("Running mws-index")
+	return callWithInheritIO(args.mwsIndexExec, "--recursive", "--include-harvest-path", args.harvestDir, "--output-directory", tmpDir)
+}
+
+func generateTemaIndex(args *Args, tmpDir string) bool {
+	fmt.Println("Running harvests2json")
+	return callWithInheritIO(args.harvests2jsonExec, "--recursive", "--harvest-path", args.harvestDir, "--index-path", tmpDir)
+}
+
+func moveTemaIndex(args *Args, tmpDir string) bool {
+	fmt.Println("Moving tema-search index")
+
+	// iterate over json files
+	err := filepath.Walk(args.harvestDir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if filepath.Ext(path) == ".json" {
+
+			// find the destination path to move it to
+			relPath, err := filepath.Rel(args.harvestDir, path)
+			if err != nil {
+				return err
+			}
+			destPath := filepath.Join(tmpDir, "tema", relPath)
+
+			// create it
+			destParent := filepath.Dir(destPath)
+			if err := os.MkdirAll(destParent, 0700); err != nil {
+				return err
+			}
+
+			// and move the file
+			return moveFile(path, destPath)
+		}
+		return nil
+	})
+
+	if err != nil {
+		panic(err)
+	}
+	return err == nil
 }
 
 func callWithInheritIO(command string, args ...string) bool {
