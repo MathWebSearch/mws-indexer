@@ -27,23 +27,43 @@ func GenerateIndex(args *Args) bool {
 		return false
 	}
 
-	if args.temaSearchMode {
-		temaResult := generateTemaIndex(args, tmpDir)
-		if !temaResult {
-			fmt.Printf("harvests2json failed, exiting.")
-			return false
-		}
-
-		temaMoveResult := moveTemaIndex(args, tmpDir)
-		if !temaMoveResult {
-			fmt.Printf("failed to move generated tema-search index, exiting.")
-			return false
-		}
-	}
-
 	fmt.Printf("Update %q with new index from %q.\n", args.indexDir, tmpDir)
 
 	content := updateContents(tmpDir, args.indexDir)
+	if content != nil {
+		fmt.Println("Update Content failed (is there enough space?)")
+		return false
+	}
+
+	if args.temaSearchMode {
+		return generateIndexTema(args)
+	}
+
+	return true
+}
+
+func generateIndexTema(args *Args) bool {
+	// create a new temporary directory
+	tmpDir, err := ioutil.TempDir("", "mws-tema-index")
+	if err != nil {
+		return false
+	}
+	fmt.Printf("Created temporary directory %q\n", tmpDir)
+	defer os.RemoveAll(tmpDir)
+
+	temaResult := generateTemaIndex(args, tmpDir)
+	if !temaResult {
+		fmt.Printf("harvests2json failed, exiting.")
+		return false
+	}
+
+	temaMoveResult := moveTemaIndex(args, tmpDir)
+	if !temaMoveResult {
+		fmt.Printf("failed to move generated tema-search index, exiting.")
+		return false
+	}
+
+	content := updateContents(tmpDir, args.temaIndexDir)
 	if content != nil {
 		fmt.Println("Update Content failed (is there enough space?)")
 		return false
@@ -77,7 +97,7 @@ func moveTemaIndex(args *Args, tmpDir string) bool {
 			if err != nil {
 				return err
 			}
-			destPath := filepath.Join(tmpDir, "tema", relPath)
+			destPath := filepath.Join(tmpDir, relPath)
 
 			// create it
 			destParent := filepath.Dir(destPath)

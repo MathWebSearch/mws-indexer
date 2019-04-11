@@ -15,5 +15,6 @@ COPY --from=builder /go/src/github.com/MathWebSearch/mws-indexer/out/mwsupdate /
 # Create volumes under harvest and index
 VOLUME /data/
 VOLUME /index/
+VOLUME /temaindex/
 
 ENTRYPOINT [ "/mws/bin/mwsupdate" ]

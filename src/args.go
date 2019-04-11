@@ -15,6 +15,7 @@ type Args struct {
 	harvests2jsonExec string
 
 	temaSearchMode bool
+	temaIndexDir   string
 }
 
 // ParseArgs parses arguments from a list of strings
@@ -33,6 +34,7 @@ func ParseArgs(args []string) *Args {
 	flagSet.BoolVar(&flags.temaSearchMode, "tema", false, "Generate indexes for tema-search")
 	flagSet.StringVar(&flags.harvestDir, "harvest-dir", "/data/", "Path to harvest directory")
 	flagSet.StringVar(&flags.indexDir, "index-dir", "/index/", "Path to index directory")
+	flagSet.StringVar(&flags.temaIndexDir, "tema-index-dir", "/temaindex/", "Path to tema index directory")
 	flagSet.StringVar(&flags.mwsIndexExec, "mws-index", "/mws/bin/mws-index", "mws-index executable")
 	flagSet.StringVar(&flags.harvests2jsonExec, "harvests2json", "/mws/bin/harvests2json", "harvests2json executable")
 
@@ -43,7 +45,6 @@ func ParseArgs(args []string) *Args {
 
 // Validate validates the command-line arguments or panics
 func (args *Args) Validate() bool {
-
 	// tema: Tema-search mode
 	fmt.Printf("tema: %t\n", args.temaSearchMode)
 
@@ -60,6 +61,13 @@ func (args *Args) Validate() bool {
 		return false
 	}
 	fmt.Printf("index-dir: %q\n", args.indexDir)
+
+	// tema-index-dir: Tema-Search-Directory
+	if args.temaSearchMode && !ensureDirectory(args.temaIndexDir) {
+		fmt.Printf("harvest-dir: %q is not a directory\n", args.temaIndexDir)
+		return false
+	}
+	fmt.Printf("tema-index-dir: %q\n", args.temaIndexDir)
 
 	// mws-index: executable to call
 	fmt.Printf("mws-index: %q\n", args.mwsIndexExec)
