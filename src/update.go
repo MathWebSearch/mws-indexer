@@ -79,7 +79,7 @@ func generateMWSIndex(args *Args, tmpDir string) bool {
 
 func generateTemaIndex(args *Args, tmpDir string) bool {
 	fmt.Println("Running harvests2json")
-	return callWithInheritIO(args.harvests2jsonExec, "--recursive", "--harvest-path", args.harvestDir, "--index-path", tmpDir)
+	return callWithInheritIO(args.harvests2jsonExec, "--recursive", "--harvest-path", args.harvestDir, "--index-path", args.indexDir)
 }
 
 func moveTemaIndex(args *Args, tmpDir string) bool {
